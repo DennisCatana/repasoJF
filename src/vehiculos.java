@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -15,6 +16,9 @@ public class vehiculos{
     private JButton siguienteButton;
     private JButton anteriorButton;
 
+    private Vehiculo[] vehiculosArray = new Vehiculo[10];
+    private int currentIndex =0;
+
     public vehiculos(){
         guardarButton.addActionListener(new ActionListener() {
             @Override
@@ -30,13 +34,33 @@ public class vehiculos{
         mostrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(marca.getText());
-                System.out.println(anio.getText());
-                System.out.println(color.getText());
+                if (currentIndex >0){
+                    Vehiculo ultimoVehiculo = vehiculosArray[currentIndex -1];
+                    System.out.println(marca.getText());
+                    System.out.println(anio.getText());
+                    System.out.println(color.getText());
+                }
+            }
+        });
+        siguienteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cardLayout = (CardLayout) vehiculos.getLayout();
+                cardLayout.next(vehiculos);
+            }
+        });
+
+        anteriorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardLayout cardLayout = (CardLayout) vehiculos.getLayout();
+                cardLayout.previous(vehiculos);
             }
         });
     }
     private void guardarDatos(String marcax, int aniox, String colorx) {
+        vehiculosArray[currentIndex] = new Vehiculo(marcax,aniox,colorx);
+        currentIndex++;
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("datos.txt", true));
             writer.write("Marca: " + marcax + ", Año: " + aniox + ", Color: " + colorx);
